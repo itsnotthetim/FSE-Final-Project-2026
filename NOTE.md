@@ -5,7 +5,7 @@ The cProfile command we first wrote in this note,
 `python3 -m cProfile -s cumtime -c "..."`, failed with `no such option: -c`
 on Python 3.10 and 3.12 (the `-c` flag exists only from Python 3.13).
 A teammate hit it by running the note's command as written. The fix was to move
-the code into `tools/prof.py` and run the script instead. Fixed in commit HASH.
+the code into `tools/prof.py` and run the script instead. Fixed in commit 56a658a.
 
 ## Case the op does not handle
 `soft_shrink` accepts float32 only. float64 and float16 tensors are
