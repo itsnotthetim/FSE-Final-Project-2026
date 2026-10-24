@@ -60,8 +60,13 @@ Run these from the repository directory, inside the course container
 ```bash
 python3 -m venv /tmp/build-venv
 /tmp/build-venv/bin/pip install torch --index-url https://download.pytorch.org/whl/cpu
-/tmp/build-venv/bin/pip wheel . --no-deps -w dist
+PIP_EXTRA_INDEX_URL=https://download.pytorch.org/whl/cpu /tmp/build-venv/bin/pip wheel . --no-deps -w dist
 ```
+
+`pip wheel` builds in its own isolated environment and installs torch there
+from `pyproject.toml`. `PIP_EXTRA_INDEX_URL` points it at the CPU index;
+without it pip pulls the multi-gigabyte CUDA torch from PyPI and the build
+takes over half an hour.
 
 **Install** it into a fresh venv:
 
@@ -85,6 +90,18 @@ tree, so they cannot import the sources instead of the wheel):
 /tmp/try-venv/bin/pip install pytest
 rm -rf /tmp/proj-tests && cp -r tests /tmp/proj-tests
 cd /tmp && /tmp/try-venv/bin/python -m pytest -q /tmp/proj-tests
+```
+
+## make wheel / install / test
+
+The `Makefile` runs the same commands. The venvs are created on first use
+(torch is downloaded once) and reused afterwards.
+
+```bash
+make wheel    # build the wheel into dist/ (creates /tmp/build-venv)
+make install  # build, then install dist/*.whl into /tmp/try-venv
+make test     # build, install, copy tests to /tmp/proj-tests, run pytest from /tmp
+make clean    # remove dist/, build/, *.egg-info and every __pycache__/
 ```
 
 ## Authors
