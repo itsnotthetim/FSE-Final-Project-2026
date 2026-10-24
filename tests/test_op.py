@@ -33,9 +33,9 @@ def test_batch_dim():
 
 # kind 4: a fake op cannot survive this
 def test_values_differ_per_element():
-    x = torch.tensor([-3.0, 0.5, 2.5])
+    x = torch.tensor([-1.5, 4.0, -0.25])
     out = soft_shrink(x)
-    assert torch.equal(out, torch.tensor([-2.0, 0.0, 1.5]))
+    assert torch.equal(out, torch.tensor([-0.5, 3.0, 0.0]))
     assert not torch.equal(out, x)
     assert len(set(out.tolist())) == 3
 
